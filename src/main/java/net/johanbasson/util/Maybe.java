@@ -1,4 +1,4 @@
-package net.johanbasson.utilities.monads;
+package net.johanbasson.util;
 
 import lombok.EqualsAndHashCode;
 

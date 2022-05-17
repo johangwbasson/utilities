@@ -1,9 +1,9 @@
-package net.johanbasson.utilities.monads;
+package net.johanbasson.util;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class EitherTest {
 
@@ -27,13 +27,13 @@ class EitherTest {
     @Test
     void shouldFoldLeftOnLeft() {
         final String value = Either.left("A").fold(l -> l + "-", r -> r + "+");
-        assertThat(value).isEqualTo("A-");
+        Assertions.assertThat(value).isEqualTo("A-");
     }
 
     @Test
     void shouldFoldRightOnRight() {
         final String value = Either.right("A").fold(l -> l + "-", r -> r + "+");
-        assertThat(value).isEqualTo("A+");
+        Assertions.assertThat(value).isEqualTo("A+");
     }
 
     @Test
@@ -41,7 +41,7 @@ class EitherTest {
         Either<String, Integer> a = Either.left("A");
         final Either<String, Integer> result = a.mapLeft(i -> i + "B");
         assertThat(result.isLeft()).isTrue();
-        result.fold(l -> assertThat(l).isEqualTo("AB"), r -> fail("Unexpected right"));
+        result.fold(l -> assertThat(l).isEqualTo("AB"), r -> Assertions.fail("Unexpected right"));
     }
 
     @Test
@@ -49,20 +49,20 @@ class EitherTest {
         Either<Integer, String> a = Either.right("B");
         final Either<Integer, String> result = a.map(i -> i + "B");
         assertThat(result.isRight()).isTrue();
-        result.fold(l -> fail("Unexpected left"), r -> assertThat(r).isEqualTo("BB"));
+        result.fold(l -> Assertions.fail("Unexpected left"), r -> assertThat(r).isEqualTo("BB"));
     }
 
     @Test
-    public void shouldFlatMapRight() {
+    void shouldFlatMapRight() {
         Either<String, Integer> either = Either.right(42);
         either.flatMap(v -> Either.right("ok"))
-                .fold( l -> fail("Unexpected left"), r -> assertThat(r).isEqualTo("ok"));
+                .fold( l -> Assertions.fail("Unexpected left"), r -> assertThat(r).isEqualTo("ok"));
     }
 
     @Test
-    public void shouldFlatMapLeft() {
+    void shouldFlatMapLeft() {
         Either<String, Integer> either = Either.left("error");
         either.flatMap(v -> Either.right("ok"))
-                .fold(l -> assertThat(l).isEqualTo("error"), r -> fail("Unexpected right"));
+                .fold(l -> assertThat(l).isEqualTo("error"), r -> Assertions.fail("Unexpected right"));
     }
 }

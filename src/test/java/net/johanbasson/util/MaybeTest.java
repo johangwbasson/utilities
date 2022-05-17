@@ -1,9 +1,9 @@
-package net.johanbasson.utilities.monads;
+package net.johanbasson.util;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class MaybeTest {
 
@@ -74,20 +74,20 @@ class MaybeTest {
     void shouldFoldRightOnSome() {
         Integer in = 42;
         Integer value = Maybe.some(in).fold(() -> 100, v -> v * 100);
-        assertThat(value).isNotNull().isEqualTo(4200);
+        Assertions.assertThat(value).isNotNull().isEqualTo(4200);
     }
 
     @Test
     void shouldConvertSomeToRight() {
         Maybe<Integer> maybe = Maybe.some(1);
         Either<String, Integer> result = maybe.toEither(() -> "No Value");
-        result.fold(l -> fail("Unexpected left"), r -> assertThat(r).isEqualTo(1));
+        result.fold(l -> Assertions.fail("Unexpected left"), r -> assertThat(r).isEqualTo(1));
     }
 
     @Test
     void shouldConvertNoneToLeft() {
         Maybe<Integer> maybe = Maybe.none();
         Either<String, Integer> result = maybe.toEither(() -> "No Value");
-        result.fold(l -> assertThat(l).isEqualTo("No Value"), r -> fail("Unexpected right"));
+        result.fold(l -> assertThat(l).isEqualTo("No Value"), r -> Assertions.fail("Unexpected right"));
     }
 }
